@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/admin_login.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="design">
+            <div class="pill-1 rotate-45"></div>
+            <div class="pill-2 rotate-45"></div>
+            <div class="pill-3 rotate-45"></div>
+            <div class="pill-4 rotate-45"></div>
+        </div>
+        <div class="login">
+            <h3 class="title">Admin Login</h3>
+            <form class="login" action="/login" method="post">
+                <!-- <div class="alert alert-warning"></div> -->
+                <div class="text-input">
+                    <i class="ri-user-fill"></i>
+                    <input type="text" placeholder="Email" name="email" value="admin"> 
+                </div>
+                <div class="text-input">
+                    <i class="ri-lock-fill"></i>
+                    <input type="password" placeholder="Password" name="password" id="password-input" value="admin"> <!-- Hardcoded password -->
+                    <i class="ri-eye-line toggle-password" id="toggle-password"></i>
+                </div>
+                <button class="login-btn">Login as Admin</button>
+                <br>
+            </form>
+            <button class="login-btn"><a href="homepage.html" style="color: white;">Return to Home</a></button>
+        </div>
+    </div>
+</body>
+</html>
+
+
+<!-- <script>
+	// Get the password input and toggle password icon elements
+const passwordInput = document.getElementById('password-input');
+const togglePassword = document.getElementById('toggle-password');
+
+// Add click event listener to the toggle password icon
+togglePassword.addEventListener('click', () => {
+    const type = passwordInput.getAttribute('type');
+    passwordInput.setAttribute('type', type === 'password' ? 'text' : 'password');
+    togglePassword.classList.toggle('ri-eye-line');
+    togglePassword.classList.toggle('ri-eye-off-line');
+});
+
+</script> -->
