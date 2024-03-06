@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, redirect, render_template, request, url_for
-from firebase import create_document, get_file_url, read_documents, upload_to_firebase_storage
+from web_scraper.academics import get_attendance, get_timetable, store_profile_pic
+from firebase import check_profile_picture_exists, create_document, get_file_url, read_documents, upload_to_firebase_storage
 
 from models import student_model, notice_model, faculty_model, peer_tutoring_model, pyq_model, opportunity_model, rules_and_procedures_model
 
@@ -292,8 +293,6 @@ def previous_year_papers():
         for field in pyq_model.fields:
             params[field] = request.form.get(field)
 
-        # TODO Add the code to read the pdf file for firestore storage
-
         pyq_data = read_documents(pyq_model.table, params)
         return pyq_data
         # TODO This page will open the pyq pdf or make it aviailable for download
@@ -344,6 +343,22 @@ def peer_tutoring():
         return peer_tutoring_data
         # return render_template('peer_tutoring/peer_tutoring.html', peer_tutoring_data=peer_tutoring_data)
 # --------------------------------------------------------------------------------------------
+
+
+# API endpoint to retrieve attendance
+@app.route('/attendance', methods=['POST'])
+def attendance():
+    data = request.get_json()
+    if not check_profile_picture_exists(data['username']):
+        store_profile_pic(data['username'], data['password'])
+        
+    return get_attendance(data['username'], data['password'])
+
+# API endpoint to retrieve timetable
+@app.route('/timetable', methods=['POST'])
+def timetable():
+    data = request.get_json()
+    return get_timetable(data['username'], data['password'])
 
 
 # Run the app if this script is executed directly

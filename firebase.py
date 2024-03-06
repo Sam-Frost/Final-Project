@@ -165,3 +165,33 @@ def get_file_url(file_name, type):
     blob.make_public()
     return blob.public_url
 
+def upload_profile_picture(image_content, rollno):
+    # Initialize the storage client
+    bucket = storage.bucket()
+
+    # Define the name for the image file and specify the folder path
+    folder_path = "profile_pictures/"  # Specify the folder path here
+    image_name = folder_path + rollno + ".jpg"
+
+    # Create a blob in Firestore storage
+    blob = bucket.blob(image_name)
+
+    # Upload the image content to Firestore storage
+    blob.upload_from_string(image_content, content_type='image/jpeg')
+
+    # Get the public URL of the uploaded image
+    blob.make_public()
+    image_url = blob.public_url
+    return image_url
+
+
+def check_profile_picture_exists(roll_no):
+    try:
+        # Destination path in Firebase Storage
+        destination_blob_name = "profile_pictures/" + roll_no + ".jpeg"
+        # Check if the file exists in Firebase Storage
+        blob = bucket.blob(destination_blob_name)
+        return blob.exists()
+    except Exception as e:
+        print("An error occurred:", e)
+        return False

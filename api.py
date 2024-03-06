@@ -87,19 +87,21 @@ def peer_tutoring_list():
 
 @api.route('/notices', methods=['POST'])
 def create_notice():
-    # Get the file from the request
-    file = request.files['file']
-    
-    # Get the JSON data from the request
-    data = request.json
-    
-    # Process the file and JSON data as needed
-    # ...
-    
-    # Send the file and JSON data as response
-    return jsonify({"status": "success", "file": file.filename, "data": data})
+    notices = read_documents(notice_model.table)
 
+    if notices:
+        return jsonify(notices)
+    else:
+        return jsonify({"error": "No opportunities found"}), 404
 
+@api.route('/rules_and_procedures', methods=['GET'])
+def get_rules_and_procedures():
+    rules_and_procedures = read_documents(rules_and_procedures_model.table)
+
+    if rules_and_procedures:
+        return jsonify(rules_and_procedures)
+    else:
+        return jsonify({"error": "No opportunities found"}), 404
 
 
 @api.route('/opportunities', methods=['GET'])
