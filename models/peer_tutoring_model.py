@@ -1,17 +1,19 @@
 table = "peer_tutoring"
 
-first_name = "first_name"
 student_mentor = "student_mentor"
 student_mentor_roll = "student_mentor_roll"
 date = "date"
+subject = "subject"
 time = "time"
 description = "description"
+department = "department"
 
 fields = [
-    first_name,
     student_mentor,
     student_mentor_roll,
     date,
+    subject,
     time,
-    description
+    description,
+    department
 ]

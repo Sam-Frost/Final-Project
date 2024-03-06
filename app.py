@@ -1,12 +1,19 @@
 from flask import Flask, jsonify, redirect, render_template, request, url_for
-from firebase import create_document, read_documents
+from firebase import create_document, get_file_url, read_documents, upload_to_firebase_storage
 
 from models import student_model, notice_model, faculty_model, peer_tutoring_model, pyq_model, opportunity_model, rules_and_procedures_model
+
+from api import api
+
+import storage
 
 # Create the Flask application
 app = Flask(__name__)
 
 # TODO : Add checks whenever adding data, if the data already exists!
+
+# API endpoints router
+app.register_blueprint(api,url_prefix='/api/v1')
 
 # Define a route for the root URL "/"
 @app.route('/', methods=['GET'])
@@ -160,17 +167,27 @@ def add_notice():
         return render_template('notice/add_notice.html')
     
     elif request.method == 'POST':
+
         notice_data = {}
         for field in notice_model.fields:
-            
-            # TODO HANDLE THE CASE OF STORING THE ACTUAL FILE
-
             notice_data[field] = request.form.get(field)
 
-        if create_document(notice_model.table, notice_data):
+        flag =  False
+
+        file = request.files['file']
+        if file and file.filename.endswith('.pdf'):
+            if upload_to_firebase_storage(file, request.form.get(notice_model.notice_number), storage.notice):     # Call the function to upload the file to Firebase Storage
+                notice_data[notice_model.file] = get_file_url(request.form.get(notice_model.notice_number), storage.notice)
+                # return jsonify({"message" : 'File uploaded successfully'})
+                flag = True
+            else:
+                return jsonify({"message" : 'An error occurred while uploading the file'}), 500
+
+        if create_document(notice_model.table, notice_data) and flag:
             return jsonify({"message": "Notice created!."}), 201
         else :
             return jsonify({"message": "An error occurred while creating the notice."}), 500
+       
     
 # --------------------------------------------------------------------------------------------
     
@@ -205,9 +222,20 @@ def add_rules_and_procedures():
         for field in rules_and_procedures_model.fields:
             rules_and_procedures_data[field] = request.form.get(field)
 
-        # TODO hanle the actual file
+        flag = False
 
-        if create_document(rules_and_procedures_model.table, rules_and_procedures_data):
+        file = request.files['file']
+        if file and file.filename.endswith('.pdf'):
+            if upload_to_firebase_storage(file, request.form.get(rules_and_procedures_model.protocol_number), storage.rules_and_procedures):     # Call the function to upload the file to Firebase Storage
+                
+                rules_and_procedures_data[rules_and_procedures_data.file] = get_file_url(request.form.get(rules_and_procedures_model.protocol_number), storage.rules_and_procedures)
+                # return jsonify({"message" : 'File uploaded successfully'})
+                flag = True
+            else:
+                return jsonify({"message" : 'An error occurred while uploading the file'}), 500
+
+
+        if create_document(rules_and_procedures_model.table, rules_and_procedures_data) and flag:
             return jsonify({"message": "Rules and Procedures added!."}), 201
         else :
             return jsonify({"message": "An error occurred while adding the Rules and Procedures."}), 500
@@ -280,24 +308,26 @@ def add_previous_year_papers():
     elif request.method == 'POST':
         pyq_data = {}
         for field in pyq_model.fields:
-            
-            # TODO HANDLE THE CASE OF STORING THE ACTUAL FILE
-            # if field == pyq_model.file_name:
-
-            #     if pyq_model.file_name not in request.files:
-            #         return jsonify({"mesage":'No file uploaded'}), 400
-
-            #     pdf_file = request.files['pdf_file']
-
-            #     # Save the file to the server or process it as needed
-            #     # TODO Save in firebase stoage
-            #     pdf_file.save('uploaded_file.pdf')
-            #     pyq_data[field] = request.form.get(field)
-            #     continue
-
             pyq_data[field] = request.form.get(field)
 
-        if create_document(pyq_model.table, pyq_data):
+        flag = False
+
+        print(pyq_data)
+
+        file = request.files['file']
+        if file and file.filename.endswith('.pdf'):
+            
+            file_name = request.form.get(pyq_model.year) + "/" + request.form.get(pyq_model.subject_code) + "/" + request.form.get(pyq_model.exam_type)
+
+            if upload_to_firebase_storage(file, file_name, storage.pyq): # Call the function to upload the file to Firebase Storage
+                pyq_data[pyq_model.file] = get_file_url(file_name, storage.pyq)
+                # return jsonify({"message" : 'File uploaded successfully'})
+                flag = True
+            else:
+                return jsonify({"message" : 'An error occurred while uploading the file'}), 500
+
+
+        if create_document(pyq_model.table, pyq_data) and flag:
             return jsonify({"message": "PYQ added!."}), 201
         else :
             return jsonify({"message": "An error occurred while adding the PYQ."}), 500

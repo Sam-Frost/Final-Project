@@ -16,6 +16,6 @@ fields = [
     department,
     specialisation,
     title,
-    description,
+    description,  
     file
 ]

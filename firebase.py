@@ -1,7 +1,6 @@
 import os
 import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import firestore
+from firebase_admin import firestore, storage, credentials
 
 
 current_dir = os.path.dirname(__file__)
@@ -9,10 +8,15 @@ firebase_json_path = os.path.join(current_dir, "firebase.json")
 
 # Initialize Firebase Admin SDK
 cred = credentials.Certificate(firebase_json_path)
-firebase_admin.initialize_app(cred)
+firebase_admin.initialize_app(cred,{
+    'storageBucket': 'finalyearproject-8c628.appspot.com' 
+})
 
 # Get a Firestore client
 db = firestore.client()
+
+# Reference to the Firebase Storage bucket
+bucket = storage.bucket()
 
 
 def read_documents(collection_name, parameters=None):
@@ -139,3 +143,25 @@ def get_document_id(collection_name, query_params):
     except Exception as e:
         print("An error occurred:", e)
         return "Error in Firebase operation"
+    
+def upload_to_firebase_storage(file, file_name, type):
+    try:
+        # Destination path in Firebase Storage
+        destination_blob_name = type +  "/" + file_name + ".pdf"
+
+        # Upload the file to Firebase Storage
+        blob = bucket.blob(destination_blob_name)
+        blob.upload_from_file(file)
+
+        print("File uploaded to Firebase Storage.")
+        return True
+    except Exception as e:
+        print("An error occurred:", e)
+        return False
+    
+def get_file_url(file_name, type):
+    destination_blob_name = type +  "/" + file_name + ".pdf"
+    blob = bucket.blob(destination_blob_name)
+    blob.make_public()
+    return blob.public_url
+
