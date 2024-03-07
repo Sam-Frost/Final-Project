@@ -9,6 +9,8 @@ batch = "batch"
 department = "department"
 specialization = "specialization"
 section = "section"
+phone = "phone"
+email = "email"
 
 
 
@@ -21,5 +23,7 @@ fields = [
     batch,
     department,
     specialization,
-    section
+    section,
+    phone,
+    email
 ]

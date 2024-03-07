@@ -1,0 +1,129 @@
+{% extends 'template.html' %}
+
+{% block title %}Add PYQ{% endblock %}
+{% block heading %}Add PYQ{% endblock %}
+<!-- 
+{% set header = True %}
+{% set pagination_script = False %} -->
+
+{% block content %}
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<link rel="stylesheet" href="../static/css/notices.css">
+ <!-- Main content -->
+ <div class="h-screen flex-grow-1 overflow-y-lg-auto">
+  
+ <div class="container"> <!-- open container -->
+   <div class="row"> <!--  open row -->
+     
+     <!-- <div id="form-header" class="col-12">
+       <h3 id="title">Add Notice</h3>
+     </div>
+   </div>  close row  -->
+  
+  <div class="row"> <!--  open row -->    
+      <div id="form-tagline" class="col-md-4">
+          <div class="form-tagline">
+              <i class="fa fa-envelope fa-5x"></i>
+          </div>
+      </div>
+     
+          <div id="form-content" class="col-md-8">
+        
+            <form id="notice-form" method="post" action="/add_previous_year_papers" enctype="multipart/form-data"> 
+                   
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label class="control-label" for="programme">Programme:</label>
+                    </div>
+                    <div class="input-group col-sm-9">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon-batch"><i class="fa fa-clipboard-list"></i></span>
+                        </div>
+                        <input id="programme" type="text" class="form-control" placeholder="Enter programme" name="programme" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label class="control-label" for="department">Department:</label>
+                    </div>
+                    <div class="input-group col-sm-9">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon-department"><i class="fa fa-building"></i></span>
+                        </div>
+                        <input id="department" type="text" class="form-control" placeholder="Enter department" name="department" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label class="control-label" for="subject_code">Subject Code:</label>
+                    </div>
+                    <div class="input-group col-sm-9">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon-code"><i class="fa fa-key"></i></span>
+                        </div>
+                        <input id="subject_code" type="text" class="form-control" placeholder="Enter subject code" name="subject_code" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label class="control-label" for="subject_name">Subject Name:</label>
+                    </div>
+                    <div class="input-group col-sm-9">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon-name"><i class="fa fa-book"></i></span>
+                        </div>
+                        <input id="subject_name" type="text" class="form-control" placeholder="Enter subject name" name="subject_name" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label class="control-label" for="year">Year:</label>
+                    </div>
+                    <div class="input-group col-sm-9">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon-year"><i class="fa fa-calendar"></i></span>
+                        </div>
+                        <input type="text" class="form-control" id="year" name="year" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label class="control-label" for="exam_type">Exam Type:</label>
+                    </div>
+                    <div class="input-group col-sm-9">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon-type"><i class="fa fa-list-alt"></i></span>
+                        </div>
+                        <input type="text" class="form-control" id="exam_type" name="exam_type" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label class="control-label" for="file">File:</label>
+                    </div>
+                    <div class="input-group col-sm-9">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon-file"><i class="fa fa-file"></i></span>
+                        </div>
+                        <input id="file" type="file" class="form-control" name="file" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-12 submit-button">
+                        <button type="submit" id="submit" class="btn d-inline-flex btn-sm btn-primary mx-1" aria-pressed="true">Add Paper</button>
+                    </div>
+                </div>
+            </form>
+            
+
+        </div> <!-- close form content div -->
+           
+  </div> <!-- close row -->
+</div><!--  close container -->
+
+
+{% endblock %}
+
+
+   

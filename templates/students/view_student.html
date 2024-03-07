@@ -1,0 +1,201 @@
+{% extends 'template.html' %}
+
+{% block title %}Admin Dashboard{% endblock %} {%
+block heading %}Student Profile{% endblock %}
+
+{% set header = True %}
+{% set pagination_script = False %}
+
+{% block content %}
+
+<br>
+<br>
+<div class="container">
+    <div class="main-body">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex flex-column align-items-center text-center">
+                            <img src="{{student_data.profile_picture}}" alt="Admin"
+                                class="rounded-circle p-1 bg-primary" width="110" />
+                            <div class="mt-3">
+                                <h4>{{student_data.student_name}}</h4>
+                            </div>
+                        </div>
+                        <hr class="my-4" />
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6>Programme</h6>
+                                <span class="text-heading">{{student_data.programme}}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6>Branch</h6>
+                                <span class="text-heading">{{student_data.department}}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6>Batch</h6>
+                                <span class="text-heading">{{student_data.batch}}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6>Specialization</h6>
+                                <span class="text-heading">{{student_data.specialization}}</span>
+                            </li>
+                            <!-- <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6>Year</h6>
+                                <span class="text-heading">{{student_data.programme}}</span>
+                            </li> -->
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6>Section</h6>
+                                <span class="text-heading">{{student_data.section}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Full Name</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                <input type="text" class="form-control" value="{{student_data.student_name}}" id="fullName" readonly />
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Email</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                <input type="text" class="form-control" value="{{student_data.email}}" id="email"
+                                    readonly />
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Roll Number</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                <input type="text" class="form-control" value="{{student_data.student_roll}}" id="rollno" readonly />
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Phone</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                <input type="text" class="form-control" value="+91 {{student_data.phone}}" id="phone" readonly />
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Date Of Birth</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                <input type="text" class="form-control" value="{{student_data.date_of_birth}}" id="dob" readonly />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-9 text-secondary">
+                                <!-- <button id="editSaveButton" class="btn d-inline-flex btn-sm btn-primary mx-1"
+                                    onclick="toggleEditMode()">
+                                    Edit
+                                </button> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="d-flex align-items-center mb-3">
+                                    Attendance Status
+                                </h5>
+                                <div id="attendanceChart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function toggleEditMode() {
+        const editSaveButton = document.getElementById("editSaveButton");
+        const fullName = document.getElementById("fullName");
+        const email = document.getElementById("email");
+        const rollno = document.getElementById("rollno");
+        const phone = document.getElementById("phone");
+        const dob = document.getElementById("dob");
+
+        if (editSaveButton.textContent === "Edit") {
+            editSaveButton.textContent = "Save Changes";
+            fullName.removeAttribute("readonly");
+            email.removeAttribute("readonly");
+            // rollno.removeAttribute("readonly");
+            phone.removeAttribute("readonly");
+            dob.removeAttribute("readonly");
+        } else {
+            editSaveButton.textContent = "Edit";
+            fullName.setAttribute("readonly", true);
+            email.setAttribute("readonly", true);
+            // rollno.setAttribute("readonly", true);
+            phone.setAttribute("readonly", true);
+            dob.setAttribute("readonly", true);
+
+        }
+    }
+
+    const attendanceData = {
+        labels: ["EVS", "French", "Big Data", "Micro Services"],
+        series: [70, 85, 60, 95], // Hardcoded attendance percentages
+    };
+
+    const options = {
+        axisY: {
+            onlyInteger: true,
+            offset: 20,
+        },
+    };
+
+    const responsiveOptions = [
+        [
+            "screen and (max-width: 640px)",
+            {
+                seriesBarDistance: 5,
+                axisX: {
+                    labelInterpolationFnc: function (value) {
+                        return value[0];
+                    },
+                },
+            },
+        ],
+    ];
+
+    new Chartist.Bar(
+        "#attendanceChart",
+        {
+            labels: attendanceData.labels,
+            series: [attendanceData.series],
+        },
+        options,
+        responsiveOptions
+    ).on("draw", function (data) {
+        if (data.type === "bar") {
+            data.element.attr({
+                style: "stroke-width: 20px; background: #5c60f5", // Set the background color here
+            });
+        }
+    });
+</script>
+
+{% endblock %}

@@ -1,6 +1,12 @@
 {% extends 'template.html' %}
 
 {% block title %}Admin Dashboard{% endblock %}
+{% block heading %}Students{% endblock %}
+
+{% set header = True %}
+{% set actions = True %}
+{% set action_url = '/add_students' %}
+{% set pagination_script = False %}
 
 {% block content %}
 
@@ -15,7 +21,7 @@
                         <div class="row">
                             <div class="col">
                                 <span class="h6 font-semibold text-muted text-sm d-block mb-2">Students</span>
-                                <span class="h3 font-bold mb-0">3000</span>
+                                <span class="h3 font-bold mb-0">{{stats.student_count}}</span>
                             </div>
                             <div class="col-auto">
                                 <div class="icon icon-shape bg-tertiary text-white text-lg rounded-circle">
@@ -26,7 +32,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-sm-6 col-12">
+            <!-- <div class="col-xl-3 col-sm-6 col-12">
                 <div class="card shadow border-0">
                     <div class="card-body">
                         <div class="row">
@@ -42,8 +48,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-xl-3 col-sm-6 col-12">
+            </div> -->
+            <!-- <div class="col-xl-3 col-sm-6 col-12">
                 <div class="card shadow border-0">
                     <div class="card-body">
                         <div class="row">
@@ -59,14 +65,14 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="col-xl-3 col-sm-6 col-12">
                 <div class="card shadow border-0">
                     <div class="card-body">
                         <div class="row">
                             <div class="col">
                                 <span class="h6 font-semibold text-muted text-sm d-block mb-2">Total Peer Sessions</span>
-                                <span class="h3 font-bold mb-0">17</span>
+                                <span class="h3 font-bold mb-0">{{stats.peer_session_count}}</span>
                             </div>
                             <div class="col-auto">
                                 <div class="col-auto">
@@ -89,42 +95,44 @@
                     <thead class="thead-light">
                         <tr>
                             <th scope="col">SNo.</th>
-                            <th scope="col">Name</th>
+                            <th scope="col">Student Name</th>
                             <th scope="col">Roll No</th>
-                            <th scope="col">Programme</th>
-                            <th scope="col">Branch</th>
                             <th scope="col">Batch</th>
+                            <th scope="col">Program</th>
+                            <th scope="col">Department</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="serial-no">1.</td>
-                            <td>
-                                <img alt="..." src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80" class="avatar avatar-sm rounded-circle me-2">
-                                <a class="text-heading font-semibold" >
-                                    Rituja Patil
-                                </a>
-                            </td>
-                            <td>
-                                20CSU159
-                            </td>
-                            <td>
-                                B.Tech.
-                            </td>
-                            <td>
-                                CSE
-                            </td>
-                            <td>
-                                2024
-                            </td>
-                            <td class="text-end">
-                                <a href="student_view.html" class="btn btn-sm btn-neutral">View</a>
-                                <button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
+                        {% for student in student_data %}
+                            
+                            <tr>
+                                <td class="serial-no">1.</td>
+                                <td>
+                                    <img alt="..." src="{{ student.profile_picture }}" class="avatar avatar-sm rounded-circle me-2">
+                                    <a class="text-heading font-semibold" >
+                                        {{ student.student_name }}
+                                    </a>
+                                </td>
+                                <td>
+                                    {{ student.student_roll }}
+                                </td>
+                                <td>
+                                    {{ student.batch}}
+                                </td>
+                                <td>
+                                    {{ student.programme }}
+                                </td>
+                                <td>
+                                    {{ student.department }}
+                                </td>
+                                <td class="text-end">
+                                <a onclick="sendStudentData('{{student.student_roll}}')" class="btn btn-sm btn-neutral">View</a> 
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+                       
                     </tbody>
                 </table>
             </div>
@@ -137,5 +145,19 @@
     </div>
 </main>
 </div>
+
+<form id="hiddenForm" action="/students" method="post" style="display: none;">
+    <input type="hidden" name="student_roll" id="studentRollInput">
+</form>
+<script>
+async function sendStudentData(studentRoll) {
+
+    // Set the value of student_roll input field
+    document.getElementById('studentRollInput').value = studentRoll;
+
+    // Submit the form
+    document.getElementById('hiddenForm').submit();
+}
+</script>
 
 {% endblock %}

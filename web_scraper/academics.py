@@ -4,9 +4,11 @@ from bs4 import BeautifulSoup # Parse through HTMl response
 from urllib.parse import urljoin
 import re # Required for cleaner
 import pandas as pd # Create dataframe and store data
-from firebase import upload_profile_picture # Create dataframe and store data
+from firebase import get_document_id, update_document, upload_profile_picture # Create dataframe and store data
 
 from web_scraper.helper import class_parser, cleaner, get_params, isDate, isDay
+
+from models import student_model
 
 login_url = ("https://academics.ncuindia.edu/Login.aspx")
 loggedin_url = ("https://academics.ncuindia.edu/Student/Dashboard.aspx")
@@ -180,6 +182,19 @@ def store_profile_pic(username, password):
 
                 # Upload the image content to Firestore storage
                 image_url = upload_profile_picture(image_response.content, username)
+
+                # update the student's profile picture URL in the database
+                
+                params = {
+                    student_model.student_roll: username
+                }
+
+                docId =  get_document_id(student_model.table, params)
+                
+                data = {
+                    student_model.profile_picture: image_url
+                }
+                update_document(student_model.table, docId,  data)
                 print('Image uploaded to Firestore storage with URL:', image_url)
 
             else:

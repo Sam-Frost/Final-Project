@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, redirect, render_template, request, url_for
 from web_scraper.academics import get_attendance, get_timetable, store_profile_pic
-from firebase import check_profile_picture_exists, create_document, get_file_url, read_documents, upload_to_firebase_storage
+from firebase import check_profile_picture_exists, create_document, docuemnt_count, get_file_url, read_documents, upload_to_firebase_storage
 
 from models import student_model, notice_model, faculty_model, peer_tutoring_model, pyq_model, opportunity_model, rules_and_procedures_model
 
@@ -39,9 +39,18 @@ def login():
 @app.route('/admin_dashboard', methods=['GET', 'POST'])
 def admin_dashboard():
     if request.method == 'GET':
-        return render_template('admin_dashboard.html')
-    elif request.method == 'POST':
-        return 'This is a POST request to the notices page.'
+        stats = {
+            "student_count" : docuemnt_count(student_model.table), 
+            "faculty_count" : docuemnt_count(faculty_model.table),
+            "peer_session_count" : docuemnt_count(peer_tutoring_model.table),
+            "notice_counts" : docuemnt_count(notice_model.table),
+            "rules_and_procedures" : docuemnt_count(rules_and_procedures_model.table),
+            "opportunity_count" : docuemnt_count(opportunity_model.table),
+            "pyq_count" : docuemnt_count(pyq_model.table)
+        }
+        student_data = read_documents(student_model.table)
+        return render_template('admin_dashboard.html', stats=stats, student_data=student_data)
+
     
 
 
@@ -51,13 +60,19 @@ def admin_dashboard():
 def students():
     if request.method == 'GET':
         # Reading all studetns from the database and printing on webpage
+    
+        stats = {
+            "student_count" : docuemnt_count(student_model.table), 
+            "peer_session_count" : docuemnt_count(peer_tutoring_model.table)
+        }
         student_data = read_documents(student_model.table)
-        return student_data
-        # return render_template('students/students.html')
+        return render_template('students/students.html', stats=stats, student_data=student_data)
     
     elif request.method == 'POST':
+        print("POST request received")
         # Retrieve student data from the database based on the roll number and display it on the webpage
         student_roll = request.form.get(student_model.student_roll)
+        print("DATA recived: ", student_roll)
         
         params = {
             student_model.student_roll: student_roll
@@ -66,8 +81,8 @@ def students():
         student_data = read_documents(student_model.table, params)
 
         if student_data:
-            return student_data
-            # return render_template('students/view_student.html', student_data=student_data[0])
+            # return student_data
+            return render_template('students/view_student.html', student_data=student_data[0])
         else :
             return jsonify({"message": "An error occurred while reading the student."}), 500
         
@@ -75,11 +90,23 @@ def students():
 @app.route('/add_students', methods=['GET', 'POST'])
 def add_students():
     if request.method == 'GET':
-        return render_template('students/add_student.html')
+        return render_template('students/add_student.html', student_fields=student_model.fields)
     
     elif request.method == 'POST':
         student_data = {}
         for field in student_model.fields:
+            
+            # CODE TO ADD PROFILE PICTURE
+            # ----------------------------------------
+            if field == student_model.profile_picture:
+                file = request.files['profile_picture']
+                if file:
+                    if file.filename.endswith('.jpg') or file.filename.endswith('.jpeg') or file.filename.endswith('.png'):
+                        if upload_to_firebase_storage(file, request.form.get(student_model.student_roll), storage.profile_pictures):
+                            student_data[student_model.profile_picture] = get_file_url(request.form.get(student_model.student_roll), storage.profile_pictures)
+                continue
+            # ----------------------------------------
+
             student_data[field] = request.form.get(field)
 
         if create_document(student_model.table, student_data):
@@ -96,13 +123,15 @@ def faculty():
     if request.method == 'GET':
         # Reading all studetns from the database and printing on webpage
         faculty_data = read_documents(faculty_model.table)
-        return faculty_data
-        # return render_template('faculty/faculty.html')
+        stats = {
+            "faculty_count" : docuemnt_count(faculty_model.table)
+        }
+        return render_template('faculty/faculty.html', faculty_data=faculty_data, stats=stats)
     
     elif request.method == 'POST':
         # Retrieve student data from the database based on the roll number and display it on the webpage
         faculty_roll = request.form.get(faculty_model.faculty_roll)
-        
+        print("DATA recived: ", faculty_roll)
         params = {
             faculty_model.faculty_roll: faculty_roll
         }
@@ -110,8 +139,8 @@ def faculty():
         faculty_data = read_documents(faculty_model.table, params)
 
         if faculty_data:
-            return faculty_data[0]
-            # return render_template('faculty/view_faculty.html', faculty_data=faculty_data[0])
+            # return faculty_data[0]
+            return render_template('faculty/view_faculty.html', faculty_data=faculty_data[0])
         else :
             return jsonify({"message": "An error occurred while reading the faculty."}), 500
         
@@ -141,8 +170,8 @@ def notices():
     if request.method == 'GET':
         # Reading all notices from the database and printing on webpage
         notice_data = read_documents(notice_model.table)
-        return notice_data
-        # return render_template('notice/notices.html', notice_data=notice_data)
+        # return notice_data
+        return render_template('notice/notices.html', notice_data=notice_data)
     
     elif request.method == 'POST':
         # Retrieve notice data from the database based on the notice_id and display it on the webpage
@@ -200,6 +229,15 @@ def add_notice():
 def rules_and_procedures():
     if request.method == 'GET':
         rules_and_procedures_data = read_documents(rules_and_procedures_model.table)
+        stats = {
+            "student_count" : docuemnt_count(student_model.table), 
+            "faculty_count" : docuemnt_count(faculty_model.table),
+            "peer_session_count" : docuemnt_count(peer_tutoring_model.table),
+            "notice_counts" : docuemnt_count(notice_model.table),
+            "rules_and_procedures" : docuemnt_count(rules_and_procedures_model.table),
+            "opportunity_count" : docuemnt_count(opportunity_model.table),
+            "pyq_count" : docuemnt_count(pyq_model.table)
+        }
         return render_template('rules_and_procedures/rules_and_procedures.html',rules_and_procedures_data=rules_and_procedures_data)
    
     elif request.method == 'POST':
@@ -249,6 +287,15 @@ def add_rules_and_procedures():
 def opportunities():
     if request.method == 'GET':
         opportunity_data = read_documents(opportunity_model.table)
+        stats = {
+            "student_count" : docuemnt_count(student_model.table), 
+            "faculty_count" : docuemnt_count(faculty_model.table),
+            "peer_session_count" : docuemnt_count(peer_tutoring_model.table),
+            "notice_counts" : docuemnt_count(notice_model.table),
+            "rules_and_procedures" : docuemnt_count(rules_and_procedures_model.table),
+            "opportunity_count" : docuemnt_count(opportunity_model.table),
+            "pyq_count" : docuemnt_count(pyq_model.table)
+        }
         return opportunity_data
         # return render_template('opportunity/opportunities.html', opportunity_data=opportunity_data)
     elif request.method == 'POST':
@@ -285,8 +332,11 @@ def add_opportunities():
 def previous_year_papers():
     if request.method == 'GET':
         pyqs_data = read_documents(pyq_model.table)
-        return pyqs_data
-        # return render_template('pyq/pyqs.html', pyqs_data=pyqs_data)
+        # return pyqs_data
+        stats = {
+            "pyq_count" : docuemnt_count(pyq_model.table)
+        }
+        return render_template('pyq/pyq.html',stats=stats, pyqs_data=pyqs_data)
     
     elif request.method == 'POST':
         params = {}
@@ -327,7 +377,7 @@ def add_previous_year_papers():
 
 
         if create_document(pyq_model.table, pyq_data) and flag:
-            return jsonify({"message": "PYQ added!."}), 201
+            return render_template('pyq/pyq.html')
         else :
             return jsonify({"message": "An error occurred while adding the PYQ."}), 500
 # --------------------------------------------------------------------------------------------
@@ -336,12 +386,29 @@ def add_previous_year_papers():
 
 # --------------------------------------------------------------------------------------------
 # Route for peer tutoring
-@app.route('/peer_tutoring', methods=['GET'])
+@app.route('/peer_tutoring', methods=['GET', 'POST'])
 def peer_tutoring():
     if request.method == 'GET':
         peer_tutoring_data = read_documents(peer_tutoring_model.table)
-        return peer_tutoring_data
-        # return render_template('peer_tutoring/peer_tutoring.html', peer_tutoring_data=peer_tutoring_data)
+        # return peer_tutoring_data
+        stats = {
+            "peer_session_count" : docuemnt_count(peer_tutoring_model.table),
+        }
+        return render_template('peer_tutoring/peer_tutoring.html', stats=stats, peer_tutoring_data=peer_tutoring_data)
+    else :
+        params = {
+            peer_tutoring_model.student_mentor_roll: request.form.get(peer_tutoring_model.student_mentor_roll),
+            peer_tutoring_model.teacher_incharge_roll: request.form.get(peer_tutoring_model.teacher_incharge_roll),
+            peer_tutoring_model.date: request.form.get(peer_tutoring_model.date),
+            peer_tutoring_model.time: request.form.get(peer_tutoring_model.time),
+            peer_tutoring_model.subject: request.form.get(peer_tutoring_model.subject),
+            peer_tutoring_model.description: request.form.get(peer_tutoring_model.description)
+        }
+
+
+        peer_tutoring_data = read_documents(peer_tutoring_model.table, params)[0]
+        print(peer_tutoring_data)
+        return render_template('peer_tutoring/view_peer_tutoring.html', peer_tutoring_data=peer_tutoring_data)
 # --------------------------------------------------------------------------------------------
 
 

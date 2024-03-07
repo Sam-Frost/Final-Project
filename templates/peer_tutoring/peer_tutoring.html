@@ -1,0 +1,126 @@
+{% extends 'template.html' %}
+
+{% block title %}Peer Tutoring{% endblock %}
+{% block heading %}Peer Tutoring{% endblock %}
+
+{% set header = True %}
+{% set actions = False %} 
+{% set pagination_script = False %}
+
+{% block content %}
+
+<!-- Main -->
+<main class="py-6 bg-surface-secondary">
+    <div class="container-fluid">
+        <!-- Card stats -->
+        <div class="row g-6 mb-6">
+            <div class="col-xl-3 col-sm-6 col-12">
+                <div class="card shadow border-0">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <span class="h6 font-semibold text-muted text-sm d-block mb-2">Peer Tutoring Sessions</span>
+                                <span class="h3 font-bold mb-0">{{stats.peer_session_count}}</span>
+                            </div>
+                            <div class="col-auto">
+                                <div class="icon icon-shape bg-tertiary text-white text-lg rounded-circle">
+                                    <i class="bi bi-people"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <div class="card shadow border-0 mb-7">
+            <div class="card-header">
+                <h5 class="mb-0">Peer Tutoring Details</h5>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover table-nowrap">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">SNo.</th>
+                            <th scope="col">Student Name</th>
+                            <th scope="col">Roll Number</th>
+                            <th scope="col">Teacher Incharge</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Time</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for peer_tutoring in peer_tutoring_data %}
+                            
+                            <tr>
+                                <td class="serial-no">1.</td>
+        
+                                <td>
+                                    {{ peer_tutoring.student_mentor }}
+                                </td>
+                                <td>
+                                    {{ peer_tutoring.student_mentor_roll }}
+                                </td>
+                                <td>
+                                    {{ peer_tutoring.teacher_incharge }}
+                                </td>
+                                <td>
+                                    {{ peer_tutoring.date }}
+                                </td>
+                                <td>
+                                    {{ peer_tutoring.time }}
+                                </td>
+                                <td class="text-end">
+                                    <a onclick="sendPeerTutoringData({
+                                        'teacher_incharge_roll': '{{ peer_tutoring.teacher_incharge_roll }}',
+                                        'student_mentor': '{{ peer_tutoring.student_mentor }}',
+                                        'student_mentor_roll': '{{ peer_tutoring.student_mentor_roll }}',
+                                        'teacher_incharge': '{{ peer_tutoring.teacher_incharge }}',
+                                        'date': '{{ peer_tutoring.date }}',
+                                        'time': '{{ peer_tutoring.time }}',
+                                        'subject': '{{ peer_tutoring.subject }}',
+                                        'description': '{{ peer_tutoring.description }}'
+                                    })" class="btn btn-sm btn-neutral">View</a> 
+                                 </td>
+                            </tr>
+                        {% endfor %}
+
+                       
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer border-0 py-5">
+                
+                <button id="prevButton" class="btn d-inline-flex btn-sm btn-primary mx-1" disabled>Previous</button>
+                <button id="nextButton" class="btn d-inline-flex btn-sm btn-primary mx-1">Next</button>
+            </div>
+        </div>
+    </div>
+</main>
+</div>
+
+<form id="hiddenForm" action="/peer_tutoring" method="post" style="display: none;">
+    <input type="hidden" name="student_mentor_roll" id="student_mentor_roll">
+    <input type="hidden" name="teacher_incharge_roll" id="teacher_incharge_roll">
+    <input type="hidden" name="date" id="date">
+    <input type="hidden" name="time" id="time">
+    <input type="hidden" name="subject" id="subject">
+    <input type="hidden" name="description" id="description">
+</form>
+<script>
+    async function sendPeerTutoringData(peerTutoringData) {
+
+        // Set the value of faculty_roll input field
+        document.getElementById('student_mentor_roll').value = peerTutoringData.student_mentor_roll;
+        document.getElementById('teacher_incharge_roll').value = peerTutoringData.teacher_incharge_roll;
+        document.getElementById('date').value = peerTutoringData.date;
+        document.getElementById('time').value = peerTutoringData.time;
+        document.getElementById('subject').value = peerTutoringData.subject;
+        document.getElementById('description').value = peerTutoringData.description;
+        // You can access other data properties similarly
+        // Submit the form
+        document.getElementById('hiddenForm').submit();
+    }
+</script>
+
+
+{% endblock %}

@@ -146,8 +146,14 @@ def get_document_id(collection_name, query_params):
     
 def upload_to_firebase_storage(file, file_name, type):
     try:
+        extension = ""
+        if type ==  'profile_pictures':
+            extension = 'jpeg'
+        else:
+            extension = 'pdf'
+            
         # Destination path in Firebase Storage
-        destination_blob_name = type +  "/" + file_name + ".pdf"
+        destination_blob_name = type +  "/" + file_name + "." + extension
 
         # Upload the file to Firebase Storage
         blob = bucket.blob(destination_blob_name)
@@ -159,6 +165,25 @@ def upload_to_firebase_storage(file, file_name, type):
         print("An error occurred:", e)
         return False
     
+def docuemnt_count(collection_name, query_params=None):
+    try:
+        print(f"Get document count function called for {collection_name}. Data:\n{query_params}\n")
+
+        collection_ref = db.collection(collection_name)
+        
+        if query_params:
+            for field, value in query_params.items():
+                collection_ref = collection_ref.where(field, '==', value)
+        
+        query_ref = collection_ref.stream()
+        
+        document_count = sum(1 for _ in query_ref)
+        return document_count
+    except Exception as e:
+        print("An error occurred:", e)
+        return -1
+    
+
 def get_file_url(file_name, type):
     destination_blob_name = type +  "/" + file_name + ".pdf"
     blob = bucket.blob(destination_blob_name)

@@ -1,0 +1,128 @@
+{% extends 'template.html' %}
+
+{% block title %}Previoes Year Question Papers{% endblock %}
+{% block heading %}Previoes Year Question Papers{% endblock %}
+
+{% set header = True %}
+{% set actions = True %}
+
+{% set action_url = '/add_previous_year_papers' %} 
+{% set pagination_script = True %}
+
+{% block content %}
+
+<!-- Main -->
+<main class="py-6 bg-surface-secondary">
+    <div class="container-fluid">
+        <!-- Card stats -->
+        <div class="row g-6 mb-6">
+            <div class="col-xl-3 col-sm-6 col-12">
+                <div class="card shadow border-0">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <span class="h6 font-semibold text-muted text-sm d-block mb-2">PYQ's</span>
+                                <span class="h3 font-bold mb-0">{{stats.pyq_count}}</span>
+                            </div>
+                            <div class="col-auto">
+                                <div class="icon icon-shape bg-tertiary text-white text-lg rounded-circle">
+                                    <i class="bi bi-people"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <div class="card shadow border-0 mb-7">
+            <div class="card-header">
+                <h5 class="mb-0">Peer Tutoring Details</h5>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover table-nowrap">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">SNo.</th>
+                            <th scope="col">Prgoramme</th>
+                            <th scope="col">Department</th>
+                            <th scope="col">Subject Code</th>
+                            <th scope="col">Subject Name</th>
+                            <th scope="col">Year</th>
+                            <th scope="col">Exam Type</th>
+                            <th scope="col">Download</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for pyq in pyqs_data %}
+                            
+                            <tr>
+                                <td class="serial-no">1.</td>
+        
+                                <td>
+                                    {{ pyq.programme }}
+                                </td>
+                                <td>
+                                    {{ pyq.department }}
+                                </td>
+                                <td>
+                                    {{ pyq.subject_code }}
+                                </td>
+                                <td>
+                                    {{ pyq.subject_name }}
+                                </td>
+                                <td>
+                                    {{ pyq.year }}
+                                </td>
+                                <td>
+                                    {{ pyq.exam_type }}
+                                </td>
+                                <td >
+                                    <a  href="{{ pyq.file }}" class="btn btn-sm btn-neutral">View</a> 
+                                 </td>
+                            </tr>
+                        {% endfor %}
+
+                       
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer border-0 py-5">
+                
+                <button id="prevButton" class="btn d-inline-flex btn-sm btn-primary mx-1" disabled>Previous</button>
+                <button id="nextButton" class="btn d-inline-flex btn-sm btn-primary mx-1">Next</button>
+            </div>
+        </div>
+    </div>
+</main>
+</div>
+
+<form id="hiddenForm" action="/previous_year_papers" method="post" style="display: none;">
+    <!-- Add hidden fields for the new data -->
+    <input type="hidden" name="programme" id="programme">
+    <input type="hidden" name="department" id="department">
+    <input type="hidden" name="subject_code" id="subject_code">
+    <input type="hidden" name="subject_name" id="subject_name">
+    <input type="hidden" name="year" id="year">
+    <input type="hidden" name="exam_type" id="exam_type">
+    <input type="hidden" name="file" id="file">
+</form>
+<script>
+    async function sendPeerTutoringData(peerTutoringData) {
+
+
+        // Set the value of the new fields
+        document.getElementById('programme').value = peerTutoringData.programme;
+        document.getElementById('department').value = peerTutoringData.department;
+        document.getElementById('subject_code').value = peerTutoringData.subject_code;
+        document.getElementById('subject_name').value = peerTutoringData.subject_name;
+        document.getElementById('year').value = peerTutoringData.year;
+        document.getElementById('exam_type').value = peerTutoringData.exam_type;
+        document.getElementById('file').value = peerTutoringData.file;
+        
+        // Submit the form
+        document.getElementById('hiddenForm').submit();
+    }
+</script>
+
+
+{% endblock %}
