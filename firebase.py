@@ -147,6 +147,7 @@ def get_document_id(collection_name, query_params):
 def upload_to_firebase_storage(file, file_name, type):
     try:
         extension = ""
+
         if type ==  'profile_pictures':
             extension = 'jpeg'
         else:
@@ -185,7 +186,15 @@ def docuemnt_count(collection_name, query_params=None):
     
 
 def get_file_url(file_name, type):
-    destination_blob_name = type +  "/" + file_name + ".pdf"
+
+    extension = ""
+        
+    if type ==  'profile_pictures':
+        extension = 'jpeg'
+    else:
+        extension = 'pdf'
+
+    destination_blob_name = type +  "/" + file_name + "." + extension
     blob = bucket.blob(destination_blob_name)
     blob.make_public()
     return blob.public_url

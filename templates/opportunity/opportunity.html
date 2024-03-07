@@ -1,12 +1,12 @@
 {% extends 'template.html' %}
 
-{% block title %}Previoes Year Question Papers{% endblock %}
-{% block heading %}Previoes Year Question Papers{% endblock %}
+{% block title %}Opportunities{% endblock %}
+{% block heading %}Opportunities{% endblock %}
 
 {% set header = True %}
 {% set actions = True %}
 
-{% set action_url = '/add_previous_year_papers' %} 
+{% set action_url = '/add_opportunity' %} 
 {% set pagination_script = True %}
 
 {% block content %}
@@ -21,8 +21,8 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col">
-                                <span class="h6 font-semibold text-muted text-sm d-block mb-2">PYQ's</span>
-                                <span class="h3 font-bold mb-0">{{stats.pyq_count}}</span>
+                                <span class="h6 font-semibold text-muted text-sm d-block mb-2">Opportunities</span>
+                                <span class="h3 font-bold mb-0">{{stats.opportunity_count}}</span>
                             </div>
                             <div class="col-auto">
                                 <div class="icon icon-shape bg-tertiary text-white text-lg rounded-circle">
@@ -35,50 +35,54 @@
             </div>
         <div class="card shadow border-0 mb-7">
             <div class="card-header">
-                <h5 class="mb-0">Peer Tutoring Details</h5>
+                <h5 class="mb-0">Opportunities Details</h5>
             </div>
             <div class="table-responsive">
                 <table class="table table-hover table-nowrap">
                     <thead class="thead-light">
                         <tr>
-                            <th scope="col">SNo.</th>
-                            <th scope="col">Prgoramme</th>
-                            <th scope="col">Department</th>
-                            <th scope="col">Subject Code</th>
-                            <th scope="col">Subject Name</th>
-                            <th scope="col">Year</th>
-                            <th scope="col">Exam Type</th>
-                            <th scope="col">Download</th>
+                            <th scope="col">Notice No.</th>
+                            <th scope="col">Company</th>
+                            <th scope="col">Due Date</th>
+                            <th scope="col">Date of Expiry</th>
+                            <th scope="col">Salary Package</th>
+                            <th scope="col">Reporting Time</th>
+                            <th scope="col">Reporting Date</th>
+                            <th scope="col">Reporting Place</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for pyq in pyqs_data %}
+                        {% for opportunity in opportunity_data %}
                             
                             <tr>
-                                <td class="serial-no">1.</td>
-        
                                 <td>
-                                    {{ pyq.programme }}
+                                    {{ opportunity.notice_number }}
                                 </td>
                                 <td>
-                                    {{ pyq.department }}
+                                    {{ opportunity.company_name }}
                                 </td>
                                 <td>
-                                    {{ pyq.subject_code }}
+                                    {{ opportunity.due_date }}
                                 </td>
                                 <td>
-                                    {{ pyq.subject_name }}
+                                    {{ opportunity.expiry_date }}
                                 </td>
                                 <td>
-                                    {{ pyq.year }}
+                                    {{ opportunity.salary_package }}
                                 </td>
                                 <td>
-                                    {{ pyq.exam_type }}
+                                    {{ opportunity.reporting_time }}
                                 </td>
-                                <td >
-                                    <a  href="{{ pyq.file }}" class="btn btn-sm btn-neutral">View</a> 
+                                <td>
+                                    {{ opportunity.reporting_date }}
                                 </td>
+                                <td>
+                                    {{ opportunity.placement_venue }}
+                                </td>
+                                <td class="text-end">
+                                    <a onclick="opportunityData('{{opportunity.notice_number}}')" class="btn btn-sm btn-neutral">View</a> 
+                                 </td>
                             </tr>
                         {% endfor %}
 
@@ -96,28 +100,14 @@
 </main>
 </div>
 
-<form id="hiddenForm" action="/previous_year_papers" method="post" style="display: none;">
+<form id="hiddenForm" action="/opportunity" method="post" style="display: none;">
     <!-- Add hidden fields for the new data -->
-    <input type="hidden" name="programme" id="programme">
-    <input type="hidden" name="department" id="department">
-    <input type="hidden" name="subject_code" id="subject_code">
-    <input type="hidden" name="subject_name" id="subject_name">
-    <input type="hidden" name="year" id="year">
-    <input type="hidden" name="exam_type" id="exam_type">
-    <input type="hidden" name="file" id="file">
+    <input type="hidden" name="notice_number" id="notice_number">
 </form>
 <script>
-    async function sendPeerTutoringData(peerTutoringData) {
-
-
+    async function opportunityData(notice_number) {
         // Set the value of the new fields
-        document.getElementById('programme').value = peerTutoringData.programme;
-        document.getElementById('department').value = peerTutoringData.department;
-        document.getElementById('subject_code').value = peerTutoringData.subject_code;
-        document.getElementById('subject_name').value = peerTutoringData.subject_name;
-        document.getElementById('year').value = peerTutoringData.year;
-        document.getElementById('exam_type').value = peerTutoringData.exam_type;
-        document.getElementById('file').value = peerTutoringData.file;
+        document.getElementById('notice_number').value = notice_number;
         
         // Submit the form
         document.getElementById('hiddenForm').submit();

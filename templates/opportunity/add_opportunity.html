@@ -1,0 +1,228 @@
+{% extends 'template.html' %}
+
+{% block title %}Add Opportunities{% endblock %}
+{% block heading %}Add Opportunities{% endblock %}
+<!-- 
+{% set header = True %}
+{% set pagination_script = False %} -->
+
+{% block content %}
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<link rel="stylesheet" href="../static/css/notices.css">
+ <!-- Main content -->
+ <div class="h-screen flex-grow-1 overflow-y-lg-auto">
+  
+ <div class="container"> <!-- open container -->
+   <div class="row"> <!--  open row -->
+     
+     <!-- <div id="form-header" class="col-12">
+       <h3 id="title">Add Notice</h3>
+     </div>
+   </div>  close row  -->
+  
+  <div class="row"> <!--  open row -->    
+      <div id="form-tagline" class="col-md-4">
+          <div class="form-tagline">
+              <i class="fa fa-envelope fa-5x"></i>
+          </div>
+      </div>
+     
+          <div id="form-content" class="col-md-8">
+        
+            <form id="notice-form" method="post" action="/add_opportunity" enctype="multipart/form-data"> 
+                   
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label class="control-label" for="notice_number">Notice Number:</label>
+                    </div>
+                    <div class="input-group col-sm-9">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon-number"><i class="fa fa-file-alt"></i></span>
+                        </div>
+                        <input id="notice_number" type="text" class="form-control" placeholder="Enter notice number" name="notice_number" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label class="control-label" for="batch">Batch:</label>
+                    </div>
+                    <div class="input-group col-sm-9">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon-batch"><i class="fa fa-clipboard-list"></i></span>
+                        </div>
+                        <input id="batch" type="text" class="form-control" placeholder="Enter batch" name="batch" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label class="control-label" for="company_name">Company Name:</label>
+                    </div>
+                    <div class="input-group col-sm-9">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon-company"><i class="fa fa-building"></i></span>
+                        </div>
+                        <input id="company_name" type="text" class="form-control" placeholder="Enter company name" name="company_name" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label class="control-label" for="eligible_streams">Eligible Streams:</label>
+                    </div>
+                    <div class="input-group col-sm-9">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon-streams"><i class="fa fa-users"></i></span>
+                        </div>
+                        <input id="eligible_streams" type="text" class="form-control" placeholder="Enter eligible streams" name="eligible_streams" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label class="control-label" for="eligibility_criteria">Eligibility Criteria:</label>
+                    </div>
+                    <div class="input-group col-sm-9">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon-criteria"><i class="fa fa-list-alt"></i></span>
+                        </div>
+                        <input id="eligibility_criteria" type="text" class="form-control" placeholder="Enter eligibility criteria" name="eligibility_criteria" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label class="control-label" for="position_offered">Position Offered:</label>
+                    </div>
+                    <div class="input-group col-sm-9">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon-position"><i class="fa fa-user-plus"></i></span>
+                        </div>
+                        <input id="position_offered" type="text" class="form-control" placeholder="Enter position offered" name="position_offered" required>
+                    </div>
+                </div>
+                <!-- Add other fields here -->
+                <!-- salary_package, due_date, placement_venue, reporting_date, reporting_time, company_profile, job_description, selection_process, general_notes, student_checklist, expiry_date -->
+                <!-- Example Field -->
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label class="control-label" for="salary_package">Due Date:</label>
+                    </div>
+                    <div class="input-group col-sm-9">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon-salary"><i class="fa fa-user-plus"></i></span>
+                        </div>
+                        <input id="due_date" type="text" class="form-control" placeholder="Enter due date" name="due_date" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label class="control-label" for="placement_venue">Venue :</label>
+                    </div>
+                    <div class="input-group col-sm-9">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon-salary"><i class="fa fa-money"></i></span>
+                        </div>
+                        <input id="placement_venue" type="text" class="form-control" placeholder="Enter Placement Venue" name="placement_venue" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label class="control-label" for="reporting_date">Reporting Date:</label>
+                    </div>
+                    <div class="input-group col-sm-9">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon-salary"><i class="fa fa-money"></i></span>
+                        </div>
+                        <input id="reporting_date" type="text" class="form-control" placeholder="Enter reporting date" name="reporting_date" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label class="control-label" for="reporting_time">Reporting Times:</label>
+                    </div>
+                    <div class="input-group col-sm-9">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon-salary"><i class="fa fa-money"></i></span>
+                        </div>
+                        <input id="reporting_time" type="text" class="form-control" placeholder="Enter reporting time" name="reporting_time" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label class="control-label" for="company_profile">Company Profile:</label>
+                    </div>
+                    <div class="input-group col-sm-9">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon-salary"><i class="fa fa-money"></i></span>
+                        </div>
+                        <input id="company_profile" type="text" class="form-control" placeholder="Enter comapny profile" name="company_profile" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label class="control-label" for="job_description">Job Description:</label>
+                    </div>
+                    <div class="input-group col-sm-9">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon-salary"><i class="fa fa-money"></i></span>
+                        </div>
+                        <input id="job_description" type="text" class="form-control" placeholder="Enter job description" name="job_description" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label class="control-label" for="selection_process">Selection Process:</label>
+                    </div>
+                    <div class="input-group col-sm-9">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon-salary"><i class="fa fa-money"></i></span>
+                        </div>
+                        <input id="selection_process" type="text" class="form-control" placeholder="Enter selection process" name="selection_process" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label class="control-label" for="general_notes">General Notes:</label>
+                    </div>
+                    <div class="input-group col-sm-9">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon-salary"><i class="fa fa-money"></i></span>
+                        </div>
+                        <input id="general_notes" type="text" class="form-control" placeholder="Enter general notes" name="general_notes" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label class="control-label" for="student_checklist">Student Checklist:</label>
+                    </div>
+                    <div class="input-group col-sm-9">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon-salary"><i class="fa fa-money"></i></span>
+                        </div>
+                        <input id="student_checklist" type="text" class="form-control" placeholder="Enter student checklist" name="student_checklist" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label class="control-label" for="expiry_date">Expiry  Date:</label>
+                    </div>
+                    <div class="input-group col-sm-9">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon-salary"><i class="fa fa-money"></i></span>
+                        </div>
+                        <input id="expiry_date" type="text" class="form-control" placeholder="Enter expiry date" name="expiry_date" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-12 submit-button">
+                        <button type="submit" id="submit" class="btn d-inline-flex btn-sm btn-primary mx-1" aria-pressed="true">Add Opportunity</button>
+                    </div>
+                </div>  
+            </form>
+            
+
+        </div> <!-- close form content div -->
+           
+  </div> <!-- close row -->
+</div><!--  close container -->
+
+
+{% endblock %}

@@ -153,10 +153,26 @@ def add_faculty():
     elif request.method == 'POST':
         faculty_data = {}
         for field in faculty_model.fields:
+
+            
+            # CODE TO ADD PROFILE PICTURE
+            # ----------------------------------------
+            if field == faculty_model.profile_picture:
+                file = request.files['profile_picture']
+                if file:
+                    if file.filename.endswith('.jpg') or file.filename.endswith('.jpeg') or file.filename.endswith('.png'):
+                        if upload_to_firebase_storage(file, request.form.get(faculty_model.faculty_roll), storage.profile_pictures):
+                            faculty_data[faculty_model.profile_picture] = get_file_url(request.form.get(faculty_model.faculty_roll), storage.profile_pictures)
+                continue
+            # ----------------------------------------
+
+
+
             faculty_data[field] = request.form.get(field)
 
         if create_document(faculty_model.table, faculty_data):
-            return jsonify({"message": "Faculty record created!."}), 201
+            return redirect(url_for('faculty')) 
+            # return jsonify({"message": "Faculty record created!."}), 201
         else :
             return jsonify({"message": "An error occurred while creating the Faculty."}), 500
 # --------------------------------------------------------------------------------------------
@@ -170,8 +186,10 @@ def notices():
     if request.method == 'GET':
         # Reading all notices from the database and printing on webpage
         notice_data = read_documents(notice_model.table)
-        # return notice_data
-        return render_template('notice/notices.html', notice_data=notice_data)
+        stats = {
+            "notice_counts" : docuemnt_count(notice_model.table),
+        }
+        return render_template('notice/notices.html', stats=stats, notice_data=notice_data)
     
     elif request.method == 'POST':
         # Retrieve notice data from the database based on the notice_id and display it on the webpage
@@ -200,6 +218,8 @@ def add_notice():
 
         notice_data = {}
         for field in notice_model.fields:
+            if field == notice_model.file:
+                continue
             notice_data[field] = request.form.get(field)
 
         flag =  False
@@ -230,15 +250,9 @@ def rules_and_procedures():
     if request.method == 'GET':
         rules_and_procedures_data = read_documents(rules_and_procedures_model.table)
         stats = {
-            "student_count" : docuemnt_count(student_model.table), 
-            "faculty_count" : docuemnt_count(faculty_model.table),
-            "peer_session_count" : docuemnt_count(peer_tutoring_model.table),
-            "notice_counts" : docuemnt_count(notice_model.table),
-            "rules_and_procedures" : docuemnt_count(rules_and_procedures_model.table),
-            "opportunity_count" : docuemnt_count(opportunity_model.table),
-            "pyq_count" : docuemnt_count(pyq_model.table)
+            "rules_and_procedures" : docuemnt_count(rules_and_procedures_model.table)
         }
-        return render_template('rules_and_procedures/rules_and_procedures.html',rules_and_procedures_data=rules_and_procedures_data)
+        return render_template('rules_and_procedures/rules_and_procedures.html', stats=stats, rules_and_procedures_data=rules_and_procedures_data)
    
     elif request.method == 'POST':
 
@@ -288,26 +302,19 @@ def opportunities():
     if request.method == 'GET':
         opportunity_data = read_documents(opportunity_model.table)
         stats = {
-            "student_count" : docuemnt_count(student_model.table), 
-            "faculty_count" : docuemnt_count(faculty_model.table),
-            "peer_session_count" : docuemnt_count(peer_tutoring_model.table),
-            "notice_counts" : docuemnt_count(notice_model.table),
-            "rules_and_procedures" : docuemnt_count(rules_and_procedures_model.table),
-            "opportunity_count" : docuemnt_count(opportunity_model.table),
-            "pyq_count" : docuemnt_count(pyq_model.table)
+            "opportunity_count" : docuemnt_count(opportunity_model.table)
         }
-        return opportunity_data
-        # return render_template('opportunity/opportunities.html', opportunity_data=opportunity_data)
+        # return opportunity_data
+        return render_template('opportunity/opportunity.html', stats=stats, opportunity_data=opportunity_data)
     elif request.method == 'POST':
         
         notice_number = request.form.get(opportunity_model.notice_number)
         param = {
             opportunity_model.notice_number: notice_number
         }
-        opportunity_data = read_documents(opportunity_model.table, param)
-
-        return opportunity_data
-        # return render_template('opportunity/opportunity.html', opportunity_data=opportunity_data)
+        opportunity_data = read_documents(opportunity_model.table, param)[0]
+        # return opportunity_data
+        return render_template('opportunity/view_opportunity.html', opportunity_data=opportunity_data)
     
 # Route for adding opportunities
 @app.route('/add_opportunity', methods=['GET', 'POST'])
@@ -320,7 +327,8 @@ def add_opportunities():
             opportunity_data[field] = request.form.get(field)
 
         if create_document(opportunity_model.table, opportunity_data):
-            return jsonify({"message": "Opportunity added!."}), 201
+            return render_template('opportunity/opportunity.html')
+            # return jsonify({"message": "Opportunity added!."}), 201
         else :
             return jsonify({"message": "An error occurred while adding the opportunity."}), 500
 # --------------------------------------------------------------------------------------------

@@ -1,21 +1,25 @@
 table = 'notices'
 
 notice_number = "notice_number"
-date = "date"
-programme = "programme"
-department = "department"
-specialisation = "specialisation"
+sender = "sender"
+to = "to"
+cc = "cc"
+date_of_notice = "date_of_notice"
 title = "title"
 description = "description"
+signe = "signe"
+date_of_expiry = "date_of_expiry"
 file = "file"
 
 fields = [
     notice_number,
-    date,
-    programme,
-    department,
-    specialisation,
+    sender,
+    to,
+    cc,
+    date_of_notice,
     title,
-    description,  
+    description,
+    signe,
+    date_of_expiry,  
     file
 ]

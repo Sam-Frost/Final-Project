@@ -1,12 +1,12 @@
 {% extends 'template.html' %}
 
-{% block title %}Previoes Year Question Papers{% endblock %}
-{% block heading %}Previoes Year Question Papers{% endblock %}
+{% block title %}Rules and Procedures{% endblock %}
+{% block heading %}Rules and Procedures{% endblock %}
 
 {% set header = True %}
 {% set actions = True %}
 
-{% set action_url = '/add_previous_year_papers' %} 
+{% set action_url = '/add_rules_and_procedures' %} 
 {% set pagination_script = True %}
 
 {% block content %}
@@ -21,8 +21,8 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col">
-                                <span class="h6 font-semibold text-muted text-sm d-block mb-2">PYQ's</span>
-                                <span class="h3 font-bold mb-0">{{stats.pyq_count}}</span>
+                                <span class="h6 font-semibold text-muted text-sm d-block mb-2">Rules and Procedures</span>
+                                <span class="h3 font-bold mb-0">{{stats.rules_and_procedures}}</span>
                             </div>
                             <div class="col-auto">
                                 <div class="icon icon-shape bg-tertiary text-white text-lg rounded-circle">
@@ -35,50 +35,47 @@
             </div>
         <div class="card shadow border-0 mb-7">
             <div class="card-header">
-                <h5 class="mb-0">Peer Tutoring Details</h5>
+                <h5 class="mb-0">Rules and Procedures</h5>
             </div>
             <div class="table-responsive">
                 <table class="table table-hover table-nowrap">
                     <thead class="thead-light">
                         <tr>
-                            <th scope="col">SNo.</th>
-                            <th scope="col">Prgoramme</th>
+                            <th scope="col">Protocol Number</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Date</th>
                             <th scope="col">Department</th>
-                            <th scope="col">Subject Code</th>
-                            <th scope="col">Subject Name</th>
-                            <th scope="col">Year</th>
-                            <th scope="col">Exam Type</th>
+                            <th scope="col">Programme</th>
+                            <th scope="col">Specialisation</th>
                             <th scope="col">Download</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for pyq in pyqs_data %}
+                        {% for doc in rules_and_procedures_data %}
                             
                             <tr>
-                                <td class="serial-no">1.</td>
-        
                                 <td>
-                                    {{ pyq.programme }}
+                                    {{ doc.protocol_number }}
                                 </td>
                                 <td>
-                                    {{ pyq.department }}
+                                    {{ doc.title }}
                                 </td>
                                 <td>
-                                    {{ pyq.subject_code }}
+                                    {{ doc.date }}
                                 </td>
                                 <td>
-                                    {{ pyq.subject_name }}
+                                    {{ doc.department }}
                                 </td>
                                 <td>
-                                    {{ pyq.year }}
+                                    {{ doc.programme }}
                                 </td>
                                 <td>
-                                    {{ pyq.exam_type }}
+                                    {{ doc.specialisation }}
                                 </td>
                                 <td >
-                                    <a  href="{{ pyq.file }}" class="btn btn-sm btn-neutral">View</a> 
-                                </td>
+                                    <a  href="{{ doc.file }}" class="btn btn-sm btn-neutral">View</a> 
+                                 </td>
                             </tr>
                         {% endfor %}
 

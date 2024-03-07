@@ -1,37 +1,19 @@
 {% extends 'template.html' %}
 
 {% block title %}Notices{% endblock %}
+{% block heading %}Notices{% endblock %}
+
+{% set header = True %}
+{% set actions = True %}
+
+{% set action_url = '/add_notice' %}
+{% set pagination_script = False %}
+
 
 {% block content %}
 
 <div class="h-screen flex-grow-1 overflow-y-lg-auto">
-    <!-- Header -->
-    <header class="bg-surface-primary border-bottom pt-6">
-        <div class="container-fluid">
-            <div class="mb-npx">
-                <div class="row align-items-center">
-                    <div class="col-sm-6 col-12 mb-4 mb-sm-0">
-                        <!-- Title -->
-                        <h1 class="h2 mb-0 ls-tight">Notices</h1>
-                    </div>
-                    <!-- Actions -->
-                    <div class="col-sm-6 col-12 text-sm-end">
-                        <div class="mx-n1">
-                            <a href="/add_notice" class="btn d-inline-flex btn-sm btn-primary mx-1">
-                                <span class=" pe-2">
-                                    <i class="bi bi-plus"></i>
-                                </span>
-                                <span>Create</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <!-- Nav -->
-                <ul class="nav nav-tabs mt-4 overflow-x border-0">
-                </ul>
-            </div>
-        </div>
-    </header>
+    
     <!-- Main -->
     <main class="py-6 bg-surface-secondary">
         <div class="container-fluid">
@@ -42,59 +24,8 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <span class="h6 font-semibold text-muted text-sm d-block mb-2">Students</span>
-                                    <span class="h3 font-bold mb-0">3000</span>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="icon icon-shape bg-tertiary text-white text-lg rounded-circle">
-                                        <i class="bi bi-people"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-sm-6 col-12">
-                    <div class="card shadow border-0">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col">
-                                    <span class="h6 font-semibold text-muted text-sm d-block mb-2">Courses</span>
-                                    <span class="h3 font-bold mb-0">515</span>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="icon icon-shape bg-primary text-white text-lg rounded-circle">
-                                        <i class="bi bi-people"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-sm-6 col-12">
-                    <div class="card shadow border-0">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col">
-                                    <span class="h6 font-semibold text-muted text-sm d-block mb-2">Specializations</span>
-                                    <span class="h3 font-bold mb-0">100</span>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="icon icon-shape bg-info text-white text-lg rounded-circle">
-                                        <i class="bi bi-people"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-sm-6 col-12">
-                    <div class="card shadow border-0">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col">
-                                    <span class="h6 font-semibold text-muted text-sm d-block mb-2">Total Peer Sessions</span>
-                                    <span class="h3 font-bold mb-0">17</span>
+                                    <span class="h6 font-semibold text-muted text-sm d-block mb-2">Notices</span>
+                                    <span class="h3 font-bold mb-0">{{stats.notice_counts}}</span>
                                 </div>
                                 <div class="col-auto">
                                     <div class="col-auto">
@@ -110,7 +41,7 @@
                
             <div class="card shadow border-0 mb-7">
                 <div class="card-header">
-                    <h5 class="mb-0">Student Details</h5>
+                    <h5 class="mb-0">All Notices</h5>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover table-nowrap">
@@ -119,33 +50,26 @@
                                 <th scope="col">Notice Number</th>
                                 <th scope="col">Date of Issue</th>
                                 <th scope="col">Notice Title</th>
-                                <th></th>
+                                <th scope="col">Issuer</th>
+                                <th scope="col">Issued  To</th>
+                                <th scope="col">Download</th>
                             </tr>
                         </thead>
                         <tbody>
+
+                            {% for notice in notice_data %}
                             <tr>
-                                <td class="serial-no">1</td>
-                                <td>2023-11-07</td>
-                                <td>Sample Notice 1</td>
-                                <td class="text-end">
-                                    <a href="notice_view.html" class="btn btn-sm btn-neutral">View</a>
-                                    <button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
+                                <td>{{ notice.notice_number }}</td>
+                                <td>{{ notice.date_of_notice }}</td>
+                                <td>{{ notice.title }}</td>
+                                <td>{{ notice.sender }}</td>
+                                <td>{{ notice.to }}</td>
+                                <td>
+                                    <a href="{{notice.file}}" class="btn btn-sm btn-neutral">View</a>
                                 </td>
                             </tr>
-                            <tr>
-                                <td class="serial-no">2</td>
-                                <td>2023-11-08</td>
-                                <td>Sample Notice 2</td>
-                                <td class="text-end">
-                                    <a href="notice_view.html" class="btn btn-sm btn-neutral">View</a>
-                                    <button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <!-- Add more rows as needed -->
+                            {% endfor %}
+                            
                         </tbody>
                     </table>
                     

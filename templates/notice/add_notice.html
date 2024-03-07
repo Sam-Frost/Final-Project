@@ -1,6 +1,10 @@
 {% extends 'template.html' %}
 
-{% block title %}Admin Dashboard{% endblock %}
+{% block title %}Add Notices{% endblock %}
+{% block heading %}Add Notices{% endblock %}
+
+{% set header = True %}
+{% set actions = False %}
 
 {% block content %}
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -8,33 +12,8 @@
 <link rel="stylesheet" href="../static/css/notices.css">
  <!-- Main content -->
  <div class="h-screen flex-grow-1 overflow-y-lg-auto">
-    <!-- Header -->
-    <header class="bg-surface-primary border-bottom pt-6">
-        <div class="container-fluid">
-            <div class="mb-npx">
-                <div class="row align-items-center">
-                    <div class="col-sm-6 col-12 mb-4 mb-sm-0">
-                        <!-- Title -->
-                        <h1 class="h2 mb-0 ls-tight">Welcome Admin</h1>
-                    </div>
-                    
-                </div>
-                <!-- Nav -->
-                <ul class="nav nav-tabs mt-4 overflow-x border-0">
-                </ul>
-            </div>
-        </div>
-    </header>
-    <!-- Main -->
   
- <div class="container"> <!-- open container -->
-   <div class="row"> <!--  open row -->
-     
-     <div id="form-header" class="col-12">
-       <h3 id="title">Add Notice</h3>
-     </div>
-   </div> <!--  close row --> 
-  
+ <div class="container"> <!-- open container --> 
   <div class="row"> <!--  open row -->    
       <div id="form-tagline" class="col-md-4">
           <div class="form-tagline">
@@ -44,59 +23,117 @@
      
           <div id="form-content" class="col-md-8">
         
-            <form id="notice-form" onsubmit="return false;">
+            <form id="notice-form" method="post" action="/add_notice" enctype="multipart/form-data">
                 <div class="form-group row">
                     <div class="col-sm-3">
-                        <label class="control-label" for="notice-number">Notice Number:</label>
+                        <label class="control-label" for="notice_number">Notice Number:</label>
                     </div>
-            
                     <div class="input-group col-sm-9">
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="basic-addon-number"><i class="fa fa-file-alt"></i></span>
                         </div>
-                        <input id="notice-number" type="text" class="form-control" placeholder="Enter notice number" name="notice-number" required>
+                        <input id="notice_number" type="text" class="form-control" placeholder="Enter notice number" name="notice_number" required>
                     </div>
                 </div>
-            
                 <div class="form-group row">
                     <div class="col-sm-3">
-                        <label class="control-label" for="notice-title">Notice Title:</label>
+                        <label class="control-label" for="sender">Sender:</label>
                     </div>
-            
                     <div class="input-group col-sm-9">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon-title"><i class="fa fa-heading"></i></span>
+                            <span class="input-group-text" id="basic-addon-sender"><i class="fa fa-user"></i></span>
                         </div>
-                        <input id="notice-title" type="text" class="form-control" placeholder="Enter notice title" name="notice-title" required>
+                        <input id="sender" type="text" class="form-control" placeholder="Enter sender" name="sender" required>
                     </div>
                 </div>
-            
                 <div class="form-group row">
                     <div class="col-sm-3">
-                        <label class="control-label" for="date-of-issue">Date of Issue:</label>
+                        <label class="control-label" for="to">To:</label>
                     </div>
-            
+                    <div class="input-group col-sm-9">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon-to"><i class="fa fa-user-friends"></i></span>
+                        </div>
+                        <input id="to" type="text" class="form-control" placeholder="Enter recipients" name="to" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label class="control-label" for="cc">CC:</label>
+                    </div>
+                    <div class="input-group col-sm-9">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon-cc"><i class="fa fa-user-friends"></i></span>
+                        </div>
+                        <input id="cc" type="text" class="form-control" placeholder="Enter CC recipients" name="cc" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label class="control-label" for="date_of_notice">Date of Notice:</label>
+                    </div>
                     <div class="input-group col-sm-9">
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="basic-addon-date"><i class="fa fa-calendar"></i></span>
                         </div>
-                        <input type="date" class="form-control" id="date-of-issue" name="date-of-issue" required>
+                        <input type="date" class="form-control" id="date_of_notice" name="date_of_notice" required>
                     </div>
                 </div>
-            
                 <div class="form-group row">
                     <div class="col-sm-3">
-                        <label class="control-label" for="notice-body">Notice Body:</label>
+                        <label class="control-label" for="title">Title:</label>
                     </div>
-            
                     <div class="input-group col-sm-9">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon-body"><i class="fa fa-align-left"></i></span>
+                            <span class="input-group-text" id="basic-addon-title"><i class="fa fa-heading"></i></span>
                         </div>
-                        <textarea class="form-control" rows="5" id="notice-body" name="notice-body" required></textarea>
+                        <input id="title" type="text" class="form-control" placeholder="Enter title" name="title" required>
                     </div>
                 </div>
-            
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label class="control-label" for="description">Description:</label>
+                    </div>
+                    <div class="input-group col-sm-9">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon-description"><i class="fa fa-align-left"></i></span>
+                        </div>
+                        <textarea class="form-control" rows="5" id="description" name="description" required></textarea>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label class="control-label" for="signe">Signed By:</label>
+                    </div>
+                    <div class="input-group col-sm-9">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon-signe"><i class="fa fa-signature"></i></span>
+                        </div>
+                        <input id="signe" type="text" class="form-control" placeholder="Enter signer" name="signe" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label class="control-label" for="date_of_expiry">Date of Expiry:</label>
+                    </div>
+                    <div class="input-group col-sm-9">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon-expiry"><i class="fa fa-calendar-times"></i></span>
+                        </div>
+                        <input type="date" class="form-control" id="date_of_expiry" name="date_of_expiry" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label class="control-label" for="file">File:</label>
+                    </div>
+                    <div class="input-group col-sm-9">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon-file"><i class="fa fa-file"></i></span>
+                        </div>
+                        <input id="file" type="file" class="form-control" name="file" required>
+                    </div>
+                </div>
                 <div class="form-group row">
                     <div class="col-sm-12 submit-button">
                         <button type="submit" id="submit" class="btn d-inline-flex btn-sm btn-primary mx-1" aria-pressed="true">Submit Notice</button>
@@ -112,6 +149,3 @@
 
 
 {% endblock %}
-
-
-   
