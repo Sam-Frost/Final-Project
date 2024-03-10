@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, redirect, render_template, request, url_for
+from flask_cors import CORS
 from web_scraper.academics import get_attendance, get_timetable, store_profile_pic
 from firebase import check_profile_picture_exists, create_document, docuemnt_count, get_file_url, read_documents, upload_to_firebase_storage
 
@@ -10,6 +11,9 @@ import storage
 
 # Create the Flask application
 app = Flask(__name__)
+
+
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # TODO : Add checks whenever adding data, if the data already exists!
 
