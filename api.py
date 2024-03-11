@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request, session
 
 from firebase import check_profile_picture_exists, create_document, read_documents
 
-from models import student_model, faculty_model, peer_tutoring_model, notice_model, rules_and_procedures_model, opportunity_model
+from models import student_model, faculty_model, peer_tutoring_model, notice_model, rules_and_procedures_model, opportunity_model, pyq_model
 from web_scraper.academics import get_attendance, get_timetable, store_profile_pic
 
 api = Blueprint('api', __name__)
@@ -127,3 +127,27 @@ def get_opportunities():
         return jsonify(opportunities)
     else:
         return jsonify({"error": "No opportunities found"}), 404
+    
+@api.route('/pyq', methods=['POST'])
+def pyq():
+
+    # Recive the roll  number
+    data = request.json
+    year = data['year']
+    programme = data['programme']
+    department = data['department']
+    
+    # Get the department of studeent using roll number
+    param = {
+        pyq_model.programme : programme,
+        pyq_model.year :  year,
+        pyq_model.department : department
+    }
+
+    pyq_dta = read_documents(pyq_model.table, param)
+
+    if pyq_dta:
+        return jsonify(pyq_dta)
+    else:
+        return jsonify({"error": "No peer tutoring sessions found"}), 404
+    
