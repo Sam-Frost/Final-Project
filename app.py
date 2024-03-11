@@ -421,20 +421,6 @@ def peer_tutoring():
 # --------------------------------------------------------------------------------------------
 
 
-# API endpoint to retrieve attendance
-@app.route('/attendance', methods=['POST'])
-def attendance():
-    data = request.get_json()
-    if not check_profile_picture_exists(data['username']):
-        store_profile_pic(data['username'], data['password'])
-        
-    return get_attendance(data['username'], data['password'])
-
-# API endpoint to retrieve timetable
-@app.route('/timetable', methods=['POST'])
-def timetable():
-    data = request.get_json()
-    return get_timetable(data['username'], data['password'])
 
 
 # Run the app if this script is executed directly

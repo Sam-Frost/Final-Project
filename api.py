@@ -1,11 +1,28 @@
 from flask import Blueprint, jsonify, request, session
 
-from firebase import create_document, read_documents
+from firebase import check_profile_picture_exists, create_document, read_documents
 
 from models import student_model, faculty_model, peer_tutoring_model, notice_model, rules_and_procedures_model, opportunity_model
+from web_scraper.academics import get_attendance, get_timetable, store_profile_pic
 
 api = Blueprint('api', __name__)
 
+
+
+# API endpoint to retrieve attendance
+@api.route('/attendance', methods=['POST'])
+def attendance():
+    data = request.get_json()
+    if not check_profile_picture_exists(data['username']):
+        store_profile_pic(data['username'], data['password'])
+        
+    return get_attendance(data['username'], data['password'])
+
+# API endpoint to retrieve timetable
+@api.route('/timetable', methods=['POST'])
+def timetable():
+    data = request.get_json()
+    return get_timetable(data['username'], data['password'])
 
 @api.route('/student_profile', methods=['POST'])
 def student_profile():
