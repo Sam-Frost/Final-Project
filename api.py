@@ -60,7 +60,6 @@ def peer_tutoring():
 def peer_tutoring_list():
 
     # Recive the roll  number
-
     data = request.json
     roll_number = data['roll_number']
     
@@ -72,7 +71,6 @@ def peer_tutoring_list():
     department = student_data[student_model.department]
 
     # get all the peer tutoring sessions for that department
-
     param = {
         peer_tutoring_model.department: department
     }
