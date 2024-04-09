@@ -282,7 +282,7 @@ def add_rules_and_procedures():
         if file and file.filename.endswith('.pdf'):
             if upload_to_firebase_storage(file, request.form.get(rules_and_procedures_model.protocol_number), storage.rules_and_procedures):     # Call the function to upload the file to Firebase Storage
                 
-                rules_and_procedures_data[rules_and_procedures_data.file] = get_file_url(request.form.get(rules_and_procedures_model.protocol_number), storage.rules_and_procedures)
+                rules_and_procedures_data[rules_and_procedures_model.file] = get_file_url(request.form.get(rules_and_procedures_model.protocol_number), storage.rules_and_procedures)
                 # return jsonify({"message" : 'File uploaded successfully'})
                 flag = True
             else:
@@ -291,6 +291,7 @@ def add_rules_and_procedures():
 
         if create_document(rules_and_procedures_model.table, rules_and_procedures_data) and flag:
             return jsonify({"message": "Rules and Procedures added!."}), 201
+            # redirect(url_for('rules_and_procedures'))
         else :
             return jsonify({"message": "An error occurred while adding the Rules and Procedures."}), 500
 # --------------------------------------------------------------------------------------------

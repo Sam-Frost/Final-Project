@@ -31,8 +31,18 @@
      
           <div id="form-content" class="col-md-8">
         
-            <form id="notice-form" method="post" action="/add_previous_year_papers" enctype="multipart/form-data"> 
-                   
+            <form id="notice-form" method="post" action="/add_rules_and_procedures" enctype="multipart/form-data"> 
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label class="control-label" for="protocol_number">Protocol Number:</label>
+                    </div>
+                    <div class="input-group col-sm-9">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon-batch"><i class="fa fa-clipboard-list"></i></span>
+                        </div>
+                        <input id="protocol_number" type="text" class="form-control" placeholder="Enter protocol number" name="protocol_number" required>
+                    </div>
+                </div>   
                 <div class="form-group row">
                     <div class="col-sm-3">
                         <label class="control-label" for="programme">Programme:</label>
@@ -57,48 +67,38 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-3">
-                        <label class="control-label" for="subject_code">Subject Code:</label>
+                        <label class="control-label" for="specialisation">Speicalisation:</label>
                     </div>
                     <div class="input-group col-sm-9">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon-code"><i class="fa fa-key"></i></span>
+                            <span class="input-group-text" id="basic-addon-department"><i class="fa fa-building"></i></span>
                         </div>
-                        <input id="subject_code" type="text" class="form-control" placeholder="Enter subject code" name="subject_code" required>
+                        <input id="specialisation" type="text" class="form-control" placeholder="Enter specialisation" name="specialisation" required>
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-3">
-                        <label class="control-label" for="subject_name">Subject Name:</label>
+                        <label class="control-label" for="title">Title:</label>
                     </div>
                     <div class="input-group col-sm-9">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon-name"><i class="fa fa-book"></i></span>
+                            <span class="input-group-text" id="basic-addon-department"><i class="fa fa-building"></i></span>
                         </div>
-                        <input id="subject_name" type="text" class="form-control" placeholder="Enter subject name" name="subject_name" required>
+                        <input id="title" type="text" class="form-control" placeholder="Enter title" name="title" required>
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-3">
-                        <label class="control-label" for="year">Year:</label>
+                        <label class="control-label" for="description">Description:</label>
                     </div>
                     <div class="input-group col-sm-9">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon-year"><i class="fa fa-calendar"></i></span>
+                            <span class="input-group-text" id="basic-addon-department"><i class="fa fa-building"></i></span>
                         </div>
-                        <input type="text" class="form-control" id="year" name="year" required>
+                        <input id="description" type="text" class="form-control" placeholder="Enter description" name="description" required>
                     </div>
                 </div>
-                <div class="form-group row">
-                    <div class="col-sm-3">
-                        <label class="control-label" for="exam_type">Exam Type:</label>
-                    </div>
-                    <div class="input-group col-sm-9">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon-type"><i class="fa fa-list-alt"></i></span>
-                        </div>
-                        <input type="text" class="form-control" id="exam_type" name="exam_type" required>
-                    </div>
-                </div>
+                
                 <div class="form-group row">
                     <div class="col-sm-3">
                         <label class="control-label" for="file">File:</label>
@@ -112,7 +112,7 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-12 submit-button">
-                        <button type="submit" id="submit" class="btn d-inline-flex btn-sm btn-primary mx-1" aria-pressed="true">Add Paper</button>
+                        <button type="submit" id="submit" class="btn d-inline-flex btn-sm btn-primary mx-1" aria-pressed="true">Add Rule & Procedures</button>
                     </div>
                 </div>
             </form>
