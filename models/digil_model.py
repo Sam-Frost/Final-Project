@@ -1,4 +1,4 @@
-table = 'digilock'
+table = "digilock"
 
 roll_number = "roll_number"
 category = "category"

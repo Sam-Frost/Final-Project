@@ -1,9 +1,11 @@
 from flask import Blueprint, jsonify, request, session
 
-from firebase import check_profile_picture_exists, create_document, read_documents
+from firebase import check_profile_picture_exists, create_document, get_file_url, read_documents, upload_to_firebase_storage
 
-from models import student_model, faculty_model, peer_tutoring_model, notice_model, rules_and_procedures_model, opportunity_model, pyq_model, digilock_model
+from models import student_model, faculty_model, peer_tutoring_model, notice_model, rules_and_procedures_model, opportunity_model, pyq_model, digil_model
 from web_scraper.academics import get_attendance, get_timetable, store_profile_pic
+
+import storage
 
 api = Blueprint('api', __name__)
 
@@ -171,34 +173,45 @@ def getDocuments():
         category = data['category']
 
         params = {
-            digilock_model.student_roll : roll_number,
-            digilock_model.category: category
+            digil_model.roll_number : roll_number,
+            digil_model.category: category
         }
 
-        student_profile = read_documents(student_model.table, params)
+        documents = read_documents(digil_model.table, params)
 
-        if student_profile:
-            student_profile = student_profile[0]
-            return jsonify(student_profile)
+        if documents:
+            return jsonify(documents)
         else:
-            return jsonify({"error": "Student not found"}), 404
+            return jsonify({"error": "Document not found"}), 404
 
-@api.route('/uploadDocuments', methods=['POST'])
-def getDocuments():
+@api.route('/uploadDocument', methods=['POST'])
+def uploadDocument():
     if request.method == 'POST':
-        
+
         data = request.json
-        roll_number = data['roll_number']
-        category = data['category']
-        fill_name = data['fill_name']
 
-        data = {
-            roll_number: roll_number,
-            category: category,
-            fill_name: fill_name
-        }
+        document_data = {}
 
-        create_document(digilock_model.table, data)
+        for field in digil_model.fields:
+            if field == digil_model.file:
+                continue
+            document_data[field] = data[field]
+
+        flag =  False
+
+        file = request.files['file']
+        if file and file.filename.endswith('.pdf'):
+            if upload_to_firebase_storage(file, request.form.get(digil_model.fill_name), storage.digilocker): # Call the function to upload the file to Firebase Storage
+                document_data[digil_model.file] = get_file_url(request.form.get(digil_model.fill_name), storage.digilocker)
+                # return jsonify({"message" : 'File uploaded successfully'})
+                flag = True
+            else:
+                return jsonify({"message" : 'An error occurred while uploading the file'}), 500
+
+        if create_document(digil_model.table, document_data) and flag:
+            return jsonify({"message": "Document added!."}), 201
+        else :
+            return jsonify({"message": "An error occurred while creating the notice."}), 500
 
         # TODO - how to handle file sent in post requst
 
