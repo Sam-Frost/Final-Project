@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request, session
 
 from firebase import check_profile_picture_exists, create_document, read_documents
 
-from models import student_model, faculty_model, peer_tutoring_model, notice_model, rules_and_procedures_model, opportunity_model, pyq_model
+from models import student_model, faculty_model, peer_tutoring_model, notice_model, rules_and_procedures_model, opportunity_model, pyq_model, digilock_model
 from web_scraper.academics import get_attendance, get_timetable, store_profile_pic
 
 api = Blueprint('api', __name__)
@@ -151,3 +151,55 @@ def pyq():
     else:
         return jsonify({"error": "No peer tutoring sessions found"}), 404
     
+
+# 1.⁠ ⁠To get the documents
+# POST REQUEST (DigiLoc):
+# Request Body : 
+# { roll_number, category}
+# —————————————————
+# 2.⁠ ⁠To upload the documents
+# POST REQUEST BODY :
+# { roll_number, category, fill_name, file}
+
+
+@api.route('/getDocuments', methods=['POST'])
+def getDocuments():
+    if request.method == 'POST':
+
+        data = request.json
+        roll_number = data['roll_number']
+        category = data['category']
+
+        params = {
+            digilock_model.student_roll : roll_number,
+            digilock_model.category: category
+        }
+
+        student_profile = read_documents(student_model.table, params)
+
+        if student_profile:
+            student_profile = student_profile[0]
+            return jsonify(student_profile)
+        else:
+            return jsonify({"error": "Student not found"}), 404
+
+@api.route('/uploadDocuments', methods=['POST'])
+def getDocuments():
+    if request.method == 'POST':
+        
+        data = request.json
+        roll_number = data['roll_number']
+        category = data['category']
+        fill_name = data['fill_name']
+
+        data = {
+            roll_number: roll_number,
+            category: category,
+            fill_name: fill_name
+        }
+
+        create_document(digilock_model.table, data)
+
+        # TODO - how to handle file sent in post requst
+
+
